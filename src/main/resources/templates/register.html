@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>重人科留言系统注册页面</title>
+    <!-- 样式和脚本链接可根据需要解开注释 -->
+    <!-- <link type="text/css" rel="stylesheet" href="css/register.css"/> -->
+    <!-- <script src="js/register.js"></script> -->
+</head>
+<body>
+<div class="container">
+    <div class="register_container">
+        <h1 class="title">重人科留言系统</h1>
+        <h3 class="sub_title">注 册</h3>
+
+        <!-- 显示错误信息 -->
+        <p th:text="${msg}" style="color: red"></p>
+
+        <!-- 注册表单 -->
+        <form method="post" action="doRegister">
+            <div class="from_group">
+                <span>用户名：</span>
+                <input name="username" placeholder="请输入用户名" required/>
+            </div>
+            <div class="from_group">
+                <span>密  码：</span>
+                <input id="pwd" type="password" name="password" placeholder="请输入密码" required/>
+            </div>
+
+            <!-- 验证码部分 -->
+            <div class="from_group">
+                <span>验证码：</span>
+                <input name="captcha" placeholder="请输入验证码" required/>
+                <img src="code" id="captcha-img" alt="验证码" onclick="freashCode()" style="vertical-align: middle; margin-left: 10px;">
+            </div>
+
+            <input class="button" type="submit" value="注　　　册"/>
+        </form>
+    </div>
+</div>
+
+<script>
+    function freashCode(){
+        document.getElementById("captcha-img").src = "code?t="+new Date().getTime();
+    }
+</script>
+</body>
+</html>

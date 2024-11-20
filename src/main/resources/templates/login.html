@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>重人科留言系统登录页面</title>
+<!--    <link type="text/css" rel="stylesheet" href="css/register.css"/>-->
+</head>
+<body>
+<div class="container">
+    <div class="register_container">
+        <h1 class="title">重人科留言系统</h1>
+        <h3 class="sub_title">登 录</h3>
+        <p th:text="${msg}" style="color: red"></p>
+        <form method="post" action="doLogin">
+            <div class="from_group">
+                <span>用户名：</span>
+                <input name="username" placeholder="请输入用户名"/>
+            </div>
+            <div class="from_group">
+                <span>密  码：</span>
+                <input name="password" type="password" placeholder="请输入密码"/>
+            </div>
+            <input class="button" type="submit" value="登　　　录"/>
+            <div class="goto_register"> <a href="register">还没账号？立即注册</a></div>
+
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
