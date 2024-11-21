@@ -26,11 +26,6 @@ public class MessageController {
 
     @GetMapping("/message")
     public String showMessages(Model model) {
-        String username = (String) session.getAttribute("username");
-        if (username == null) {
-            model.addAttribute("msg", "请先登录");
-            return "login";
-        }
         model.addAttribute("messages", msgService.getAllMessages());
         return "message";
     }

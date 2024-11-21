@@ -1,6 +1,7 @@
 package org.example.spring1114.controller;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.example.spring1114.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,14 @@ public class UserController {
     }
     // 显示登录⻚⾯
     @RequestMapping("/login")
-    public String toLogin() {
-        return "login";
+    public String loginPage(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+        String msg = (String) session.getAttribute("msg");
+        if (msg != null) {
+            model.addAttribute("msg", msg); // 传递到前端
+            session.removeAttribute("msg"); // 消息读取后清除
+        }
+        return "login"; // 返回 Thymeleaf 的 login.html
     }
     @RequestMapping("/doLogin")
     public String login(String username, String password, Model model, HttpSession session) {
@@ -57,12 +64,6 @@ public class UserController {
     @RequestMapping("/home")
     public String home(HttpSession session, Model model) {
         String username = (String) session.getAttribute("username");
-
-        if (username == null) {
-            model.addAttribute("msg", "请先登录");
-            return "login"; // 如果 session 中没有用户名，重定向到登录页面
-        }
-
         model.addAttribute("username", username); // 将用户名传递到视图
         return "home";
     }
