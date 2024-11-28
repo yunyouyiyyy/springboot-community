@@ -1,8 +1,9 @@
 package org.example.spring1114.controller;
 
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.example.spring1114.listener.OnlineCntListener;
+import org.example.spring1114.service.CaptchaService;
 import org.example.spring1114.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,16 +20,19 @@ public class UserController {
     public String toRegister() {
         return "register";
     }
+    // 注入CaptchaService
+    @Autowired
+    private CaptchaService captchaService;
+
     // 处理注册请求
     @RequestMapping("/doRegister")
-    public String register(String username, String password, Model model,HttpSession session,@RequestParam("captcha") String captchaInput) {
-        String captcha = (String) session.getAttribute("captcha");
-        if(captcha == null || !captcha.equals(captchaInput)) {
-            model.addAttribute("msg", "验证码错误，请重试！");
-            return "register"; // 返回注册页面
-        }
+    public String register(String username,
+                           String password,
+                           Model model,
+                           HttpSession session,
+                           String email) {
         try {
-            userService.register(username, password);
+            userService.register(username, password, email);
             System.out.println("success");
             return "redirect:/login";
         } catch (Exception e) {
@@ -49,22 +53,73 @@ public class UserController {
         return "login"; // 返回 Thymeleaf 的 login.html
     }
     @RequestMapping("/doLogin")
-    public String login(String username, String password, Model model, HttpSession session) {
+    public String login(String username,
+                        String password,
+                        Model model,
+                        HttpSession session,
+                        @RequestParam(value = "captcha", required = false) String captchaInput) {
+
+        // 获取登录错误次数
+        Integer loginAttempts = (Integer) session.getAttribute("loginAttempts");
+        if (loginAttempts == null) {
+            loginAttempts = 0; // 初始化为 0
+        }
+
+        // 获取保存的验证码
+        String captcha = (String) session.getAttribute("captcha");
+
+        // 如果已经尝试过 3 次错误登录，则要求输入验证码
+        if (loginAttempts >= 3) {
+            // 校验验证码
+            if (captcha == null || !captcha.equals(captchaInput)) {
+                model.addAttribute("msg", "验证码错误，请重试！");
+                return "login"; // 返回登录页面，验证码错误
+            }
+        }
+
+        // 登录验证
         if (userService.login(username, password)) {
-            System.out.println("success");
+            // 登录成功，清除错误次数
+            session.removeAttribute("loginAttempts");
+            session.removeAttribute("captcha"); // 清除验证码
+            System.out.println("Login Success");
+
             session.setAttribute("username", username);
             return "redirect:/home";
         } else {
-            System.out.println("error");
+            // 登录失败，增加错误次数
+            session.setAttribute("loginAttempts", loginAttempts + 1);
+            System.out.println("Login Failed");
             model.addAttribute("msg", "用户名或密码错误");
+
+            // 如果错误次数达到 3 次，显示验证码
+            if (loginAttempts + 1 >= 3) {
+                model.addAttribute("showCaptcha", true); // 控制显示验证码
+            } else {
+                model.addAttribute("showCaptcha", false); // 不显示验证码
+            }
             return "login";
         }
     }
+
+
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session, Model model) {
+        // 清除会话中的用户信息
+        session.invalidate();
+
+        // 返回首页并显示登出消息
+        model.addAttribute("msg", "您已成功登出！");
+        return "login"; // 假设这是首页模板
+    }
+
     // 显示首页
     @RequestMapping("/home")
     public String home(HttpSession session, Model model) {
         String username = (String) session.getAttribute("username");
         model.addAttribute("username", username); // 将用户名传递到视图
+        model.addAttribute("onlineCnt", OnlineCntListener.getCnt());
         return "home";
     }
 }
