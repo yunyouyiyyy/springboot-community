@@ -12,10 +12,8 @@
     <div class="register_container">
         <h1 class="title">重人科留言系统</h1>
         <h3 class="sub_title">注 册</h3>
-
         <!-- 显示错误信息 -->
         <p th:text="${msg}" style="color: red"></p>
-
         <!-- 注册表单 -->
         <form method="post" action="doRegister">
             <div class="from_group">
@@ -26,16 +24,13 @@
                 <span>密  码：</span>
                 <input id="pwd" type="password" name="password" placeholder="请输入密码" required/>
             </div>
-
             <div class="from_group">
                 <span>邮  箱：</span>
                 <input id="email" type="email" name="email" placeholder="请输入邮件" required/>
             </div>
-
             <input class="button" type="submit" value="注　　　册"/>
         </form>
     </div>
 </div>
-
 </body>
 </html>

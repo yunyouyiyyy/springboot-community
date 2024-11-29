@@ -17,3 +17,9 @@
 - pom.xml里添加了spring-boot-starter-mail依赖
 - application.properties里添加了邮件发送的配置
 
+2024.11.29
+修复了验证码无法显示的bug，之前无法显示验证码的原因是因为没有在登录失败时正确地控制 showCaptcha，
+从而导致验证码输入框未能显示。在修改后的代码中，通过 model.addAttribute("showCaptcha", true) 
+确保了在错误登录次数超过 3 次时，验证码输入框能够正确显示。
+(改变代码
+- UserController
