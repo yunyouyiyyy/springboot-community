@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
@@ -10,7 +10,10 @@
 
 <!-- 动态显示用户名 -->
 <p th:if="${username}" th:text="'欢迎, ' + ${username}"></p>
+<p th:if="${onlineCnt}" th:text="'在线用户数, ' + ${onlineCnt}"></p>
 <a href="message">留言</a>
 
+<!-- 动态显示登出按钮 -->
+<a th:if="${username}" href="/logout">登出</a>
 </body>
 </html>

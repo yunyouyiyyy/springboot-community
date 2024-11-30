@@ -7,7 +7,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 
 import java.io.IOException;
 
-@ServletComponentScan
+@ServletComponentScan//扫描servlet
 @SpringBootApplication
 public class MyApplication implements CommandLineRunner {
 

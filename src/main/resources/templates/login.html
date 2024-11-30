@@ -1,31 +1,41 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>重人科留言系统登录页面</title>
-<!--    <link type="text/css" rel="stylesheet" href="css/register.css"/>-->
+    <title>登录</title>
 </head>
 <body>
 <div class="container">
-    <div class="register_container">
-        <h1 class="title">重人科留言系统</h1>
-        <h3 class="sub_title">登 录</h3>
-        <p th:text="${msg}" style="color: red"></p>
-        <form method="post" action="doLogin">
-            <div class="from_group">
-                <span>用户名：</span>
-                <input name="username" placeholder="请输入用户名"/>
-            </div>
-            <div class="from_group">
-                <span>密  码：</span>
-                <input name="password" type="password" placeholder="请输入密码"/>
-            </div>
-            <input class="button" type="submit" value="登　　　录"/>
-            <div class="goto_register"> <a href="register">还没账号？立即注册</a></div>
+    <h1>登录</h1>
+    <p th:text="${msg}" style="color: red"></p>
 
-        </form>
-    </div>
+    <form method="post" action="doLogin">
+        <div class="form_group">
+            <span>用户名：</span>
+            <input name="username" placeholder="请输入用户名" required/>
+        </div>
+
+        <div class="form_group">
+            <span>密码：</span>
+            <input name="password" type="password" placeholder="请输入密码" required/>
+        </div>
+
+        <!-- 如果错误次数 >= 3，显示验证码输入框 -->
+        <div class="form_group" th:if="${showCaptcha}">
+            <span>验证码：</span>
+            <input name="captcha" placeholder="请输入验证码" required/>
+            <img src="code" id="captcha-img" alt="验证码" onclick="freashCode()" style="vertical-align: middle; margin-left: 10px;">
+        </div>
+
+        <input class="button" type="submit" value="登录"/>
+    </form>
 </div>
 
+<script>
+    // 刷新验证码
+    function freashCode(){
+        document.getElementById("captcha-img").src = "code?t=" + new Date().getTime();
+    }
+</script>
 </body>
 </html>
