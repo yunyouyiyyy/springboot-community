@@ -1,0 +1,48 @@
+name: Automate Task Progress
+
+on:
+  issues:
+    types: [labeled, unlabeled, assigned, closed]  # 监听 Issues 的标签、指派和关闭
+  pull_request:
+    types: [opened, closed]  # 监听 PR 的打开和关闭
+
+jobs:
+  move-backlog-to-to-do:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'labeled' && contains(github.event.label.name, 'priority')  # 当添加标签 priority 时触发
+    steps:
+      - name: Move issue to To Do
+        run: |
+          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -d '{"column_id": "YOUR_TODO_COLUMN_ID"}' \
+          https://api.github.com/projects/columns/cards/${{ github.event.issue.id }}/moves
+
+  move-to-do-to-in-progress:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'assigned'  # 当任务被分配责任人时触发
+    steps:
+      - name: Move issue to In Progress
+        run: |
+          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -d '{"column_id": "YOUR_IN_PROGRESS_COLUMN_ID"}' \
+          https://api.github.com/projects/columns/cards/${{ github.event.issue.id }}/moves
+
+  move-in-progress-to-review:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened'  # 当 PR 被提交时触发
+    steps:
+      - name: Move PR to Review
+        run: |
+          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -d '{"column_id": "YOUR_REVIEW_COLUMN_ID"}' \
+          https://api.github.com/projects/columns/cards/${{ github.event.pull_request.id }}/moves
+
+  move-review-to-done:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'closed'  # 当 PR 合并或 Issue 被关闭时触发
+    steps:
+      - name: Move task to Done
+        run: |
+          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -d '{"column_id": "YOUR_DONE_COLUMN_ID"}' \
+          https://api.github.com/projects/columns/cards/${{ github.event.issue.id }}/moves
