@@ -2,11 +2,22 @@ name: Automate Task Progress
 
 on:
   issues:
-    types: [labeled, unlabeled, assigned, closed]  # 监听 Issues 的标签、指派和关闭
+    types: [labeled, unlabeled, assigned, closed, opened]  # 监听 Issues 的标签、指派、关闭和创建事件
   pull_request:
     types: [opened, closed]  # 监听 PR 的打开和关闭
 
 jobs:
+  move-issue-to-backlog:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened'  # 当 Issue 被创建时触发
+    steps:
+      - name: Move new issue to Backlog
+        run: |
+          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -d '{"column_id": "YOUR_BACKLOG_COLUMN_ID"}' \
+          https://api.github.com/projects/columns/cards \
+          -d '{"content_id": "${{ github.event.issue.id }}", "content_type": "Issue"}'
+          
   move-backlog-to-to-do:
     runs-on: ubuntu-latest
     if: github.event.action == 'labeled' && contains(github.event.label.name, 'priority')  # 当添加标签 priority 时触发
@@ -46,3 +57,5 @@ jobs:
           curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -d '{"column_id": "YOUR_DONE_COLUMN_ID"}' \
           https://api.github.com/projects/columns/cards/${{ github.event.issue.id }}/moves
+
+ 
