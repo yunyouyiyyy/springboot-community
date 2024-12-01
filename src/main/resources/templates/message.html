@@ -19,12 +19,14 @@
     <div class="message-list" id="messageList">
         <!-- 留言列表 -->
         <div th:each="item : ${messages}" class="message">
-            <div class="username" th:text="${item.username}"></div>
-            <div class="timestamp" th:text="${item.formattedTime}"></div>
-            <div class="content" th:text="${item.message}"></div>
+            <div class="username" th:text="${item.user.username}"></div>
+<!--            <div class="timestamp" th:text="${#dates.format(item.createAt, 'yyyy-MM-dd HH:mm:ss')}"></div>-->
+            <!-- 直接使用 item.createAt，Thymeleaf 会自动将 Timestamp 转换为日期格式 -->
+            <div class="timestamp" th:text="${#dates.format(item.createAt, 'yyyy  MM.dd HH:mm')}"></div>
+            <div class="content" th:text="${item.content}"></div>
             <!-- 如果留言包含图片，显示图片 -->
-            <div th:if="${item.imageUrl != null}">
-                <img th:src="@{${item.imageUrl}}"
+            <div th:if="${item.imagePath != null}">
+                <img th:src="@{${item.imagePath}}"
                      alt="留言图片"
                      style="width: 300px; height: auto; max-height: 200px;" />
             </div>
@@ -44,7 +46,6 @@
         </div>
         <input type="submit" value="发布留言" />
     </form>
-
 
 </div>
 </body>
