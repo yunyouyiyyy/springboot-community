@@ -3,14 +3,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.io.IOException;
 
 //@ServletComponentScan//扫描servlet
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = "org.example.spring1114.dao")
 public class MyApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
@@ -39,4 +36,3 @@ public class MyApplication implements CommandLineRunner {
         }
     }
 }
-

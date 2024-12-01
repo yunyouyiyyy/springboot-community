@@ -15,7 +15,7 @@ public class Message {
     @GeneratedValue(strategy = IDENTITY)
     private int id;
 
-    @ManyToOne // 多对一关系
+    @ManyToOne // 多对一 关系
     @JoinColumn(name = "user_id") // 映射到 Message 表中的 user_id 外键
     private User user;  // 用户对象，通过外键关联
 
@@ -28,6 +28,9 @@ public class Message {
     @Column(name = "created_at")
     private Timestamp createAt;
 
+
+    public Message() {
+    }
 
     // Getter 和 Setter 方法
 
