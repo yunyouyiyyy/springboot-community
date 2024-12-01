@@ -1,65 +1,74 @@
 package org.example.spring1114.bean;
 
+import jakarta.persistence.*;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Timestamp;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+
+@Entity
+@Table(name = "message")
 public class Message {
 
-    private String username;
-    private long time;
-    private String message;
-    private String formattedTime;
-    private String imageUrl;
+    @Id
+    @Column(name="id")
+    @GeneratedValue(strategy = IDENTITY)
+    private int id;
 
-    // 添加一个 SimpleDateFormat 对象，用于格式化时间
-    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    @ManyToOne // 多对一关系
+    @JoinColumn(name = "user_id") // 映射到 Message 表中的 user_id 外键
+    private User user;  // 用户对象，通过外键关联
 
-    public Message(String username, String message, long time,String imageUrl) {
-        this.username = username;
-        this.time = time;
-        this.message = message;
-        this.formattedTime = sdf.format(new Date(time));
-        this.imageUrl = imageUrl;  // 初始化新字段
-    }
+    @Column(name = "content")
+    private String content;
 
-    // Getter and Setter methods
-    public String getUsername() {
-        return username;
-    }
+    @Column(name = "image_path")
+    private String imagePath;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    @Column(name = "created_at")
+    private Timestamp createAt;
 
-    public long getTime() {
-        return time;
+
+    // Getter 和 Setter 方法
+
+    public int getId() {
+        return id;
     }
 
-    public void setTime(long time) {
-        this.time = time;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getMessage() {
-        return message;
+    public User getUser() {
+        return user;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public String getFormattedTime() {
-        return formattedTime;
+    public String getContent() {
+        return content;
     }
 
-    public void setFormattedTime(String formattedTime) {
-        this.formattedTime = formattedTime;
+    public void setContent(String content) {
+        this.content = content;
     }
-    //imageUrl的getter和setter方法
-    public String getImageUrl() {
-        return imageUrl;
+
+    public String getImagePath() {
+        return imagePath;
     }
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
+
+    public Timestamp getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Timestamp createAt) {
+        this.createAt = createAt;
+    }
+
 }

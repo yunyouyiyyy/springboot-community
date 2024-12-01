@@ -9,8 +9,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // 将 /uploads/** 映射到本地路径 E:/code/spring1114/uploads/
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:E:/code/spring1114/uploads/");
+                .addResourceLocations("file:" + System.getProperty("user.dir") + "/uploads/");
     }
 }
