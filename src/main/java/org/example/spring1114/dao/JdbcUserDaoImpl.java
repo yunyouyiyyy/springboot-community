@@ -9,7 +9,7 @@ public class JdbcUserDaoImpl implements IUserDAO {
     // 数据库连接的 URL、⽤户名和密码
     private final String url = "jdbc:mysql://localhost:3306/cqrkdb"; // 数据库的 JDBCURL
     private final String user = "root"; // 数据库⽤户名
-    private final String password = "200434zyl"; // 数据库密码
+    private final String password = "123456"; // 数据库密码
     @Override
     public String getPasswordByUsername(String username) {
         // SQL 查询语句，⽤于根据⽤户名获取密码
