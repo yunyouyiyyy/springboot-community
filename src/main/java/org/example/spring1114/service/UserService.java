@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final IUserDAO userDao;
-    public UserService(@Qualifier("jdbcUserDao") IUserDAO userDao) {
+    public UserService(@Qualifier("springJdbcUserDao") IUserDAO userDao) {
         this.userDao = userDao;
     }
     public void register(String username, String password,String email) {
