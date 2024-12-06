@@ -1,10 +1,15 @@
 package org.example.spring1114.service;
 
-import org.example.spring1114.bean.Message;
+
+
+import org.example.spring1114.bean.ImageMessageDTO;
 
 import java.util.List;
 
 public interface IMsgService {
-    List<Message> getAllMessages();
-    void addMessage(Message message);
+
+    List<ImageMessageDTO> listAll();
+
+    void sendMessage(String username, String message,String imagePath);
+
 }

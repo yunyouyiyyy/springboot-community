@@ -1,10 +1,12 @@
 package org.example.spring1114.dao;
 
-import org.example.spring1114.bean.Message;
+import org.example.spring1114.bean.ImageMessage;
+import org.example.spring1114.bean.ImageMessageDTO;
 
 import java.util.List;
 
 public interface IMsgDAO {
-    List<Message> getAllMessages();
-    void addMessage(Message message);
+    List<ImageMessageDTO> listAll();
+
+    void add(ImageMessage messageObj);
 }

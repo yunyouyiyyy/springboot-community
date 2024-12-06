@@ -1,51 +1,75 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>留言系统</title>
-    <style>
-        .message { margin-bottom: 10px; }
-        .username { font-weight: bold; }
-        .timestamp { font-size: 0.9em; color: gray; }
-        .content { margin-top: 5px; }
-        .input-group { margin-top: 20px; }
-        textarea { width: 100%; }
-    </style>
+    <link rel="stylesheet" type="text/css" href="css/message.css">
+    <script src="js/message.js"></script>
 </head>
 <body>
 <div class="container">
     <h2 class="title">重人科留言系统</h2>
 
     <div class="message-list" id="messageList">
-        <!-- 留言列表 -->
+        <!--        留言列表item布局如下，生成的时候按照这样的格式生成item-->
+        <!--        <div class="message">-->
+        <!--            <div class="username">用户A</div>-->
+        <!--            <div class="timestamp">2024-10-13 14:30</div>-->
+        <!--            <div class="content">这是一条留言内容。</div>-->
+        <!--        </div>-->
+
+        <!--  Jsp + EL + JSTL 方式       -->
+        <!--        <c:forEach var="item" items="${messages}">-->
+        <!--                <div class="message">-->
+        <!--                    <div class="username">${item.username}</div>-->
+        <!--                    <div class="timestamp">${item.timeStr}</div>-->
+        <!--                    <div class="content">${item.message}</div>-->
+        <!--                </div>-->
+        <!--        </c:forEach>-->
+
+        <!--  thymeleaf       -->
         <div th:each="item : ${messages}" class="message">
             <div class="username" th:text="${item.username}"></div>
-            <div class="timestamp" th:text="${item.formattedTime}"></div>
-            <div class="content" th:text="${item.message}"></div>
-            <!-- 如果留言包含图片，显示图片 -->
-            <div th:if="${item.imageUrl != null}">
-                <img th:src="@{${item.imageUrl}}"
-                     alt="留言图片"
-                     style="width: 300px; height: auto; max-height: 200px;" />
+            <div class="timestamp" th:text="${item.timeStr}" ></div>
+            <div class="content" th:text="${item.content}"></div>
+
+            <div th:if="${item.imagePath}" style="width: 100px">
+                <img th:src="@{${item.imagePath}}" alt="用户上传的图片" style="max-width: 200px;"/>
             </div>
+            <!--            对比jsp方式-->
+            <!--            <c:if test="${not empty item.imagePath}">-->
+            <!--                <div style="width: 100px">-->
+            <!--                    <img src="${item.imagePath}" alt="用户上传的图片" style="max-width: 200px;"/>-->
+            <!--                </div>-->
+            <!--            </c:if>-->
+            <hr>
         </div>
 
-        <hr />
+
     </div>
 
     <h3>发布留言</h3>
-    <form action="/message" method="post" enctype="multipart/form-data">
+    <!--    <form action="sendMessage" method="post">-->
+    <!--        <div class="input-group">-->
+    <!--            <textarea id="message" name="message" rows="4" placeholder="请输入留言内容" required></textarea>-->
+    <!--        </div>-->
+    <!--        <input type="submit" value="发布留言"/>-->
+    <!--    </form>-->
+
+    <form action="sendImageMessage" method="post" enctype="multipart/form-data" >
         <div class="input-group">
-            <textarea name="message" rows="4" placeholder="请输入留言内容" required></textarea>
+            <textarea id="message" name="message" rows="4" placeholder="请输入留言内容" required></textarea>
         </div>
+
         <div class="input-group">
-            <label for="image">上传图片：</label>
-            <input type="file" id="image" name="image" accept="image/*" />
+            <label for="image">上传图片:</label>
+            <input type="file" id="image" name="image" accept="image/*"/>
         </div>
-        <input type="submit" value="发布留言" />
+
+
+        <input type="submit" value="发布留言"/>
     </form>
-
-
 </div>
 </body>
 </html>
