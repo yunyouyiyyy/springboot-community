@@ -33,4 +33,17 @@ public class SpringJdbcUserDaoImpl implements IUserDAO {
         String query = "INSERT INTO user (username, password) VALUES (?, ?)";
         jdbcTemplate.update(query, username, password);
     }
+
+    @Override
+    public Integer getUserIdByUsername(String username) {
+        // 查询用户ID
+        String query = "SELECT id FROM user WHERE username = ?";
+        try {
+            return jdbcTemplate.queryForObject(query, new Object[]{username}, Integer.class);
+        } catch (Exception e) {
+            // 如果查询不到，返回 null 或者抛出自定义异常
+            return null;
+        }
+    }
+
 }

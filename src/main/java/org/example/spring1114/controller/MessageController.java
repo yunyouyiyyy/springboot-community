@@ -73,7 +73,7 @@ public class MessageController {
         }
         System.out.println("imagePath = " + imagePath);
         // 调用服务层方法，发送带有用户名、消息内容及图像路径的消息
-        imageMessageService.sendMessage(username, message, imagePath);
+        imageMessageService.sendMessage(username, message, imagePath,session);
 
         // 重定向到 "imageMessage" 页面，返回视图名称
         return "redirect:message";
@@ -110,7 +110,7 @@ public class MessageController {
             imagePath = uploadDir + File.separatorChar + fileName;
         }
 
-        imageMessageService.sendMessage(username, message, imagePath);
+        imageMessageService.sendMessage(username, message, imagePath,session);
         return "redirect:imageMessage";
     }
 }

@@ -25,4 +25,9 @@ public class UserService {
         String pwd = userDao.getPasswordByUsername(username);
         return pwd != null && pwd.equals(password);
     }
+
+    // 通过用户名获取用户ID
+    public Integer getUserIdByUsername(String username) {
+        return userDao.getUserIdByUsername(username);
+    }
 }

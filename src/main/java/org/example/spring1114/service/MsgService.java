@@ -1,6 +1,7 @@
 package org.example.spring1114.service;
 
 
+import jakarta.servlet.http.HttpSession;
 import org.example.spring1114.bean.ImageMessage;
 import org.example.spring1114.bean.ImageMessageDTO;
 import org.example.spring1114.dao.IMsgDAO;
@@ -21,8 +22,13 @@ public class MsgService implements IMsgService{
     }
 
     @Override
-    public void sendMessage(String username, String message, String imagePath) {
-        ImageMessage messageObj = new ImageMessage(1,message,System.currentTimeMillis(),imagePath) ;
+    public void sendMessage(String username, String message, String imagePath,HttpSession session) {
+        // 从 session 中获取当前用户的 userId
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
+            throw new IllegalStateException("用户未登录");
+        }
+        ImageMessage messageObj = new ImageMessage(userId,message,System.currentTimeMillis(),imagePath) ;
         iMsgDAO.add(messageObj);
     }
 }

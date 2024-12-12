@@ -78,6 +78,10 @@ public class UserController {
             session.removeAttribute("loginAttempts");
             session.removeAttribute("captcha"); // 清除验证码
             session.setAttribute("username", username);
+            // 获取当前登录用户的 userId 并存储到 session
+            Integer userId = userService.getUserIdByUsername(username); // 通过用户名获取 userId
+            session.setAttribute("userId", userId); // 存储 userId
+
             return "redirect:/home";
         } else {
             session.setAttribute("loginAttempts", loginAttempts + 1);
